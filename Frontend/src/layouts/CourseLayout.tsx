@@ -1,0 +1,71 @@
+import CourseContent from "../components/courses/CourseContent";
+import BannerContent from "../components/courses/BannerContent";
+import { courseDataType } from "../data/courses/KanaData";
+import { userProgressLessonData } from "../data/user/userProgressData";
+
+type CoursesProps = {
+  title: string;
+  japaneseText: string;
+  brushImage: string;
+  filters: string[];
+  cardData: courseDataType[];
+};
+
+export default function CourseLayout({
+  title,
+  japaneseText,
+  brushImage,
+  cardData,
+}: CoursesProps) {
+  // const { activeFilters, filteredCards, filterSort } =
+  //   useCourseFilters(cardData);
+
+  return (
+    <>
+      {/*--------------*/}
+      {/*Banner section*/}
+      {/*--------------*/}
+
+      <BannerContent
+        title={title}
+        japaneseText={japaneseText}
+        brushImage={brushImage}
+      />
+
+      {/*--------------------*/}
+      {/*Side content section*/}
+      {/*--------------------*/}
+
+      <div className="max-w-7xl mx-auto mt-10">
+        <div className="relative">
+          <aside className="flex flex-col justify-center absolute -left-50">
+            <label className="text-3xl">Filters</label>
+            {/* {filters.map((filter) => (
+              <SideContent
+                key={filter}
+                title={filter}
+                checked={activeFilters.includes(filter)}
+                onChange={() => filterSort(filter)}
+              />
+            ))} */}
+          </aside>
+
+          {/*--------------------*/}
+          {/*Card content section*/}
+          {/*--------------------*/}
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mx-auto max-w-7xl">
+            {cardData.map((card) => {
+              const lessonId = userProgressLessonData.find(
+                (p) => p.lessonId === card.lessonId
+              );
+              const completed = lessonId ? lessonId.completed : 0;
+              
+              return <CourseContent key={card.lessonId} {...card} totalCompleted={completed} />;
+            })}
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
